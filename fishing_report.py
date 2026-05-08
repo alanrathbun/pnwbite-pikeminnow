@@ -31,8 +31,15 @@ from zoneinfo import ZoneInfo
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 
-_DEFAULT_HTML = Path(__file__).resolve().parent / "report.html"
+# DATA_DIR: state location. /data on Railway; project dir locally.
+DATA_DIR = Path(os.environ.get("DATA_DIR", str(Path(__file__).resolve().parent)))
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+_DEFAULT_HTML = DATA_DIR / "report.html"
 OUTPUT_HTML  = Path(os.environ.get("FISHING_HTML", str(_DEFAULT_HTML)))
+NWS_GRID_CACHE     = DATA_DIR / ".nws_grid_cache.json"
+CPUE_CACHE         = DATA_DIR / ".cpue_2025_cache.json"
+TEMP_HIST_CACHE    = DATA_DIR / ".dart_temp_history_cache.json"
 
 LOCAL_TZ = ZoneInfo("America/Los_Angeles")
 LOOKAHEAD_DAYS = 6  # today + next 6 days = 7 days total (NWS forecast ceiling)
@@ -268,7 +275,7 @@ def feeding_window(hour_f, rise_h, set_h):
 
 # ── NWS GRID LOOKUP (cached on disk) ──────────────────────────────────────────
 
-_GRID_CACHE = Path(__file__).resolve().parent / ".nws_grid_cache.json"
+_GRID_CACHE = NWS_GRID_CACHE
 
 def _load_grid_cache():
     if _GRID_CACHE.exists():
@@ -300,7 +307,7 @@ def nws_grid_for(lat, lon, cache):
 # 2025 data is frozen (last week ended 10/12/2025), so we cache forever.
 # Cache shape: { "<slug>": [["4/20", 0.6], ["4/27", 5.8], ...], ... }
 
-_CPUE_CACHE_FILE = Path(__file__).resolve().parent / ".cpue_2025_cache.json"
+_CPUE_CACHE_FILE = CPUE_CACHE
 CPUE_YEAR = 2025
 
 def _load_cpue_cache():
@@ -392,7 +399,7 @@ def cpue_lookup(entries, target_d):
 # so a year that's running 2°F warm stays 2°F warm in the forecast.
 
 CLIMATOLOGY_YEARS = 10
-_TEMP_HIST_CACHE = Path(__file__).resolve().parent / ".dart_temp_history_cache.json"
+_TEMP_HIST_CACHE = TEMP_HIST_CACHE
 
 def _load_temp_hist_cache():
     if _TEMP_HIST_CACHE.exists():

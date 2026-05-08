@@ -40,10 +40,13 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
-PORT        = 7070
-_DEFAULT_HTML = Path(__file__).resolve().parent / "report.html"
+# DATA_DIR: state location. /data on Railway; project dir locally.
+DATA_DIR    = Path(os.environ.get("DATA_DIR", str(Path(__file__).resolve().parent)))
+PORT        = int(os.environ.get("PORT", "7070"))
+BIND_HOST   = os.environ.get("BIND_HOST", "0.0.0.0")
+_DEFAULT_HTML = DATA_DIR / "report.html"
 REPORT_FILE = Path(os.environ.get("FISHING_HTML", str(_DEFAULT_HTML)))
-BIND_ADDR   = "0.0.0.0"
+BIND_ADDR   = BIND_HOST  # back-compat alias
 STALE_HOURS = 26  # report regenerates daily at 05:30; warn after ~1 missed run
 
 PLACEHOLDER_HTML = """<!DOCTYPE html>
