@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+*.log
+report.html
+.report_data.json
+.nws_grid_cache.json
+.cpue_2025_cache.json
+.dart_temp_history_cache.json
+.tmp
+*.tmp
+fishing.log
+fishing_server.log
+pikeminnow.zip
