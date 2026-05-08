@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+*.log
+report.html
+.cpue_2025_cache.json
+.nws_grid_cache.json
+.dart_temp_history_cache.json
+.tmp
+*.tmp
+docs/
+*.md
+pikeminnow.zip

@@ -865,6 +865,12 @@ def render_html(data):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NPSRP Fishing Conditions — {data['target_range']}</title>
+<meta property="og:title" content="Pikeminnow Sport-Reward Report" />
+<meta property="og:description" content="Daily fishing forecast for 21 NPSRP check-in stations on the Columbia River." />
+<meta property="og:url" content="https://pikeminnow.pnwbite.com/" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="description" content="Daily Northern Pikeminnow Sport-Reward Program fishing forecast across 21 check-in stations on the Columbia River." />
 <style>
   :root {{
     --bg:#0a0e12; --bg2:#0d1620; --bg3:#0a1018; --bdr:#111d28; --bdr2:#1a2e3a;
