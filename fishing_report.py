@@ -676,7 +676,7 @@ def build_data():
             })
 
     return {
-        "generated":    datetime.now().strftime("%A %B %-d, %Y at %-I:%M %p"),
+        "generated":    datetime.now(LOCAL_TZ).strftime("%A %B %-d, %Y at %-I:%M %p"),
         "target_range": f"{date.fromisoformat(target_dates[0]).strftime('%b %-d')} – "
                         f"{date.fromisoformat(target_dates[-1]).strftime('%b %-d, %Y')}",
         "stations":     stations,

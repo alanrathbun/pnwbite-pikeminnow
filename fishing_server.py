@@ -39,6 +39,9 @@ import sys
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+LOCAL_TZ = ZoneInfo("America/Los_Angeles")
 
 # DATA_DIR: state location. /data on Railway; project dir locally.
 DATA_DIR    = Path(os.environ.get("DATA_DIR", str(Path(__file__).resolve().parent)))
@@ -69,7 +72,7 @@ PLACEHOLDER_HTML = """<!DOCTYPE html>
 
 
 def _inject_freshness_banner(html_bytes: bytes, mtime: datetime) -> bytes:
-    age = datetime.now() - mtime
+    age = datetime.now(LOCAL_TZ) - mtime
     age_h = age.total_seconds() / 3600
     stale = age_h > STALE_HOURS
     bg = "#7a2e2e" if stale else "#1a3a4a"
@@ -125,9 +128,9 @@ class ReportHandler(BaseHTTPRequestHandler):
                 "ok": ok,
                 "report_file": str(REPORT_FILE),
                 "size": REPORT_FILE.stat().st_size if ok else 0,
-                "mtime": (datetime.fromtimestamp(REPORT_FILE.stat().st_mtime)
+                "mtime": (datetime.fromtimestamp(REPORT_FILE.stat().st_mtime, tz=LOCAL_TZ)
                           .isoformat(timespec="seconds")) if ok else None,
-                "now": datetime.now().isoformat(timespec="seconds"),
+                "now": datetime.now(LOCAL_TZ).isoformat(timespec="seconds"),
             }
             self._send(200, json.dumps(payload, indent=2),
                        ctype="application/json", cors=True)
@@ -166,7 +169,7 @@ class ReportHandler(BaseHTTPRequestHandler):
         if REPORT_FILE.exists():
             content = _inject_freshness_banner(
                 REPORT_FILE.read_bytes(),
-                datetime.fromtimestamp(REPORT_FILE.stat().st_mtime),
+                datetime.fromtimestamp(REPORT_FILE.stat().st_mtime, tz=LOCAL_TZ),
             )
         else:
             content = PLACEHOLDER_HTML.encode("utf-8")
@@ -185,7 +188,7 @@ def main():
     if not REPORT_FILE.exists():
         print(f"  NOTE  : Report not found - placeholder served until first run")
     else:
-        mtime = datetime.fromtimestamp(REPORT_FILE.stat().st_mtime)
+        mtime = datetime.fromtimestamp(REPORT_FILE.stat().st_mtime, tz=LOCAL_TZ)
         print(f"  Ready : last report {mtime:%Y-%m-%d %H:%M}")
     print()
 
