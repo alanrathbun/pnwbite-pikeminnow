@@ -1062,7 +1062,8 @@ def write_atomic(path: Path, html: str) -> None:
         except OSError: pass
         raise
 
-if __name__ == "__main__":
+def main():
+    """Generate the report. Importable by the scheduler."""
     print(f"[{datetime.now():%Y-%m-%d %H:%M}] Generating fishing report…")
     data = build_data()
     if data is None:
@@ -1074,3 +1075,7 @@ if __name__ == "__main__":
     n_temp = sum(1 for s in data["stations"] if s["has_temp"])
     print(f"[{datetime.now():%Y-%m-%d %H:%M}] Report written → {OUTPUT_HTML}  ({len(html):,} bytes)")
     print(f"  Stations: {len(data['stations'])} ({n_temp} with live water-temp)")
+
+
+if __name__ == "__main__":
+    main()
