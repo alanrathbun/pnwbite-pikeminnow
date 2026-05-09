@@ -99,13 +99,15 @@ def _inject_freshness_banner(html_bytes: bytes, mtime: datetime) -> bytes:
 
 class ReportHandler(BaseHTTPRequestHandler):
 
-    def _send(self, status, body, ctype="text/html; charset=utf-8"):
+    def _send(self, status, body, ctype="text/html; charset=utf-8", cors=False):
         if isinstance(body, str):
             body = body.encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        if cors:
+            self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         try:
             self.wfile.write(body)
@@ -128,7 +130,7 @@ class ReportHandler(BaseHTTPRequestHandler):
                 "now": datetime.now().isoformat(timespec="seconds"),
             }
             self._send(200, json.dumps(payload, indent=2),
-                       ctype="application/json")
+                       ctype="application/json", cors=True)
             return
 
         if self.path == "/robots.txt":
