@@ -816,7 +816,7 @@ def render_station_section(s):
           <span class="ds-value">{fmt_temp(s['wtemp_now'])}</span> {temp_status}</div>
         <div class="now-cell"><span class="ds-label">2025 CPUE this week</span>
           <span class="ds-value">{cpue_now}</span>
-          <span class="ds-sub">{('wk ending ' + cpue_now_wk) if cpue_now_wk else 'no 2025 data'}</span></div>
+          <span class="ds-sub">{('wk ending ' + cpue_now_wk) if cpue_now_wk else 'no 2025 data'} &middot; <a href="https://www.pikeminnow.org/catch-data/catch-data-by-station/catch-data-{s['slug']}/" target="_blank" rel="noopener">weekly catch reports &#8599;</a></span></div>
       </div>
       {day_html}
     </div>"""
@@ -935,6 +935,8 @@ def render_html(data):
   .ds-value {{ font-size:22px; font-weight:bold; }}
   .ds-value small {{ font-size:11px; color:var(--dim); font-weight:normal; margin-left:4px; }}
   .ds-sub {{ font-size:9px; color:var(--dim); margin-left:6px; letter-spacing:.06em; }}
+  .ds-sub a {{ color:var(--acc); text-decoration:none; }}
+  .ds-sub a:hover {{ text-decoration:underline; }}
   .no-temp {{ font-size:9px; color:var(--dim); margin-left:8px; }}
 
   .day-section {{ background:var(--bg2); border-bottom:2px solid var(--bdr); }}
