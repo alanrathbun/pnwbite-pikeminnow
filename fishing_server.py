@@ -37,7 +37,7 @@ import json
 import os
 import sys
 from datetime import datetime
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -192,7 +192,8 @@ def main():
         print(f"  Ready : last report {mtime:%Y-%m-%d %H:%M}")
     print()
 
-    server = HTTPServer((BIND_ADDR, PORT), ReportHandler)
+    server = ThreadingHTTPServer((BIND_ADDR, PORT), ReportHandler)
+    server.daemon_threads = True
     try:
         server.serve_forever()
     except KeyboardInterrupt:
